@@ -35,7 +35,7 @@ namespace task
             timer = new Timer();
         }
 
-        private void CreateTimer(int taskNumber)
+        private void CreateTaskTimer(int taskNumber)
         {
             timer = new Timer();
             timer.Interval = 100;
@@ -137,33 +137,33 @@ namespace task
                     PaintRectangle(4, 2, x0, y0);
                     break;
                 case 2:
-                    DrawSnowflake(x0, y0, 15, 2);
+                    PaintSnowflake(0, 0, 15, 5);
                     break;
                 case 3:
                     PaintRectangles(x0, y0, 120, 40, 4, 3);
                     break;
                 case 4:
-                    CreateTimer(5);
+                    CreateTaskTimer(5);
                     timer.Start();
                     break;
                 case 5:
-                    CreateTimer(8);
+                    CreateTaskTimer(8);
                     timer.Start();
                     break;
                 case 6:
                     PaintRecursiveSquare(10, x0, y0);
                     break;
                 case 7:
-                    CornerShadingA(7, 20);
+                    PaintCornerA(7, 20);
                     break;
                 case 8:
-                    DrawB(20, 16);
+                    PaintCornerB(20, 16);
                     break;
                 case 9:
-                    DrawAngleStar(20, 8, 1);
+                    PaintCornerC(20, 8, 1);
                     break;
                 case 10:
-                    DrawRhombusStar(20, 8);
+                    PaintCornerD(20, 8);
                     break;
             }
         }
@@ -194,7 +194,7 @@ namespace task
             }
         }
         
-        private void DrawSnowflake(double centerX, double centerY, double radius, int nesting)
+        private void PaintSnowflake(double centerX, double centerY, double radius, int nesting)
         {
             if (nesting < 1)
             {
@@ -208,8 +208,14 @@ namespace task
             {
                 var endPoint = RotateLine(startPoint, radius, currAngle);
                 Graph.DrawLine(MyPen, ScreenCoords(startPoint.X, startPoint.Y), ScreenCoords(endPoint.X, endPoint.Y));
-                DrawSnowflake(endPoint.X, endPoint.Y, radius / 5, nesting - 1);
+                PaintSnowflake(endPoint.X, endPoint.Y, radius / 5, nesting - 1);
             }
+        }
+        
+        private PointF ScreenCoords(double x, double y)
+        {
+            const int k = 20;
+            return new PointF((float)(ClientSize.Width / 2 + x * k), (float)(ClientSize.Height / 2 - y * k));
         }
 
         private static PointF RotateLine(PointF startPoint, double radius, double angle)
@@ -315,7 +321,7 @@ namespace task
             }
         }
         
-        private void CornerShadingA(int cornerCount, double radius)
+        private void PaintCornerA(int cornerCount, double radius)
         {
             var angle = 2 * Math.PI / cornerCount;
             var betweenAngle = angle / 6;
@@ -362,14 +368,8 @@ namespace task
                     ScreenCoords(secondLinePoints[firstLinePoints.Count - i - 1].X, secondLinePoints[firstLinePoints.Count - i - 1].Y));
             }
         }
-        
-        private PointF ScreenCoords(double x, double y)
-        {
-            const int k = 20;
-            return new PointF((float)(ClientSize.Width / 2 + x * k), (float)(ClientSize.Height / 2 - y * k));
-        }
-        
-        private void DrawB(double radius, int linesCount)
+
+        private void PaintCornerB(double radius, int linesCount)
         {
             const float t = 0.25f;
             var angle = 2 * Math.PI / linesCount;
@@ -388,7 +388,7 @@ namespace task
             }
         }
         
-        private void DrawAngleStar(double radius, int angleCount, double angleLenDecrease)
+        private void PaintCornerC(double radius, int angleCount, double angleLenDecrease)
         {
             var angle = 2 * Math.PI / angleCount;
             var angleLength = radius * (angleCount / 2) * Math.Sqrt(2.965) / (angleCount + 1) / angleLenDecrease;
@@ -409,9 +409,9 @@ namespace task
             }
         }
         
-        private void DrawRhombusStar(double radius, int angleCount)
+        private void PaintCornerD(double radius, int angleCount)
         {
-            DrawAngleStar(radius, angleCount, Math.Sqrt(2));
+            PaintCornerC(radius, angleCount, Math.Sqrt(2));
 
             var angle = 2 * Math.PI / angleCount;
             var addAngle = Math.PI / 38.5;
