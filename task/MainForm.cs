@@ -137,7 +137,7 @@ namespace task
                     PaintRectangle(4, 2, x0, y0);
                     break;
                 case 2:
-                    PaintSnowflake(0, 0, 15, 5);
+                    PaintSnowflake(0, 0, 15, 2);
                     break;
                 case 3:
                     PaintRectangles(x0, y0, 120, 40, 4, 3);
